@@ -1,6 +1,6 @@
 from django.contrib import admin
 from . import models
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -50,13 +50,13 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(models.RawImage)
 class RawImageAdmin(admin.ModelAdmin):
-    
-    readonly_fields = ('image', 'title')
 
-    def image(self, obj):
-        return mark_safe('<img src="{url}" width="{width}" height={height} />'.format(
-            url = obj.image.url,
-            width=obj.image.width,
-            height=obj.image.height,
-            )
+    list_display = (
+        "image_tag",
+        'id',
+        "title",
+        "image",
     )
+
+    def image_tag(self, obj):
+        return format_html('<img src="{}" height="300"/>'.format(obj.image.url))
