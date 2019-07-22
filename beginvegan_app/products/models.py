@@ -1,5 +1,6 @@
 from django.db import models
 from beginvegan_app.materials import models as material_models
+from django.utils.html import format_html
 
 # Create your models here.
 class TimeStampedModel(models.Model):
@@ -47,11 +48,10 @@ class Company(TimeStampedModel):
 
 class Product(TimeStampedModel):
 
-    name = models.CharField(max_length=100, null=True, blank=True)
-    image = models.ImageField(upload_to='images', null=True, blank=True)
-    category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, related_name="category")
+    name = models.CharField(max_length=255, null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name="category")
     materials = models.ManyToManyField(material_models.Material, through="ProductMaterial")
-    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, related_name="company")
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True, related_name="company")
 
     def __str__(self):
         return "{}".format(self.name)
@@ -72,10 +72,11 @@ class ProductMaterial(TimeStampedModel):
         db_table = 'product_material'
 
 
-class RawImage(TimeStampedModel):
+class ProductImage(TimeStampedModel):
 
     title = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to='img/raw_images', null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
-        db_table = 'raw_images'
+        db_table = 'product_images'
