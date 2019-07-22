@@ -34,6 +34,11 @@ class ProductMaterialAdmin(admin.StackedInline):
 
     # )
 
+
+class RemoveMaterialAdmin(admin.StackedInline):
+    model = models.RemoveMaterial
+
+
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
 
@@ -46,7 +51,7 @@ class ProductAdmin(admin.ModelAdmin):
         "created_at"
     )
     search_fields = ['materials_set__name']
-    inlines = [ProductImageAdmin, ProductMaterialAdmin]
+    inlines = [ProductImageAdmin, ProductMaterialAdmin, RemoveMaterialAdmin]
 
 
 @admin.register(models.ProductCategory)
